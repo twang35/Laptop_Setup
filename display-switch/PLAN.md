@@ -103,7 +103,9 @@ change forces a mode set, the mode set retrains the link, and the monitor sees t
 | `sweep.sh` | wiggle harness. Runs each candidate N times and prints how many attempts each needed |
 | `recipe.sh` | ordering and settle harness. Scores **first-attempt** success per recipe. `PARK=` sets how long to sit on the desktop first |
 | `probe.sh` | timing probe: write and wiggle once, then watch until the input flips, to separate a premature read from a failed switch |
-| `shortcuts/*.unsigned.plist` | one-action Shortcut definitions. **Cannot be signed without iCloud sign-in**, so the two Shortcuts have to be made by hand — one action each, see `README.md` |
+(The Shortcuts themselves are not in the repo. Signing one requires iCloud sign-in, and the live
+definitions cannot be read back either — the Shortcuts store is TCC-protected. They are one action
+each; `README.md` has the recipe.)
 
 ## Waking the desktop
 

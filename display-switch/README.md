@@ -18,8 +18,14 @@ to the floor for this approach; see *Why it is not faster*.
 
 ## Set up the two hotkeys
 
-The Shortcuts cannot be shipped as files — signing one requires being signed into iCloud — but each
-is a **single action**, so this takes about a minute.
+The Shortcuts are not in this repo and cannot easily be. Signing one requires being signed into
+iCloud, and an existing one cannot be read back either: the store under
+`~/Library/Group Containers/group.com.apple.shortcuts/` is TCC-protected, and the `shortcuts` CLI
+offers `list`, `view`, `run` and `sign` but no export.
+
+They are a **single action** each, so building them by hand takes about a minute.
+
+The two in use are named **Monitor to Desktop Input** and **Monitor to Laptop Input**.
 
 For each of the two directions:
 
