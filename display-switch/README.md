@@ -69,7 +69,7 @@ Environment variables, so the behaviour can be swept without editing the script:
 |---|---|---|
 | `WIGGLE` | `refreshRate` | `refreshRate` (60→40-60→60), `rate5994`, `rate50`, `reinitialize`, `reconfigure`, `none` |
 | `LEAD` | `0.1` | wall time from dispatching the input write to starting the wiggle |
-| `GAP` | `0.4` | wall time between the two halves of the wiggle |
+| `GAP` | `0.1` | wall time between the two halves of the wiggle |
 | `VERIFY` | `0` | `1` polls until the monitor confirms and reports |
 | `DEADLINE` | `10` | with `VERIFY=1`, how long to keep polling |
 | `MON` | `BenQ EL2870U` | display name |

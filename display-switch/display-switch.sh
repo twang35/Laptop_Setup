@@ -42,7 +42,7 @@ RATE=${RATE:-60Hz}            # exact string from `get -refreshRateList`
 VRR=${VRR:-40-60Hz}           # ditto
 
 LEAD=${LEAD:-0.1}             # wall time from dispatching the input write to starting the wiggle
-GAP=${GAP:-0.4}               # wall time between the two halves of the wiggle
+GAP=${GAP:-0.1}               # wall time between the two halves of the wiggle
 VERIFY=${VERIFY:-0}           # 0: dispatch and exit. 1: poll until the monitor confirms, and report
 DEADLINE=${DEADLINE:-10}      # with VERIFY=1, how long to keep polling
 

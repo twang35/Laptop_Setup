@@ -103,9 +103,7 @@ change forces a mode set, the mode set retrains the link, and the monitor sees t
 | `sweep.sh` | wiggle harness. Runs each candidate N times and prints how many attempts each needed |
 | `recipe.sh` | ordering and settle harness. Scores **first-attempt** success per recipe. `PARK=` sets how long to sit on the desktop first |
 | `probe.sh` | timing probe: write and wiggle once, then watch until the input flips, to separate a premature read from a failed switch |
-(The Shortcuts themselves are not in the repo. Signing one requires iCloud sign-in, and the live
-definitions cannot be read back either — the Shortcuts store is TCC-protected. They are one action
-each; `README.md` has the recipe.)
+| `shortcuts/` | the two Shortcuts actually in use, extracted from `~/Library/Shortcuts/Shortcuts.sqlite`. A record, not importable — Shortcuts imports only signed files and signing needs iCloud. `shortcuts/README.md` also records where the hotkeys live, which is `pbs.plist`, not the Shortcuts store |
 
 ## Waking the desktop
 
