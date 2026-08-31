@@ -18,25 +18,22 @@ to the floor for this approach; see *Why it is not faster*.
 
 ## Set up the two hotkeys
 
-The Shortcuts are not in this repo and cannot easily be. Signing one requires being signed into
-iCloud, and an existing one cannot be read back either: the store under
-`~/Library/Group Containers/group.com.apple.shortcuts/` is TCC-protected, and the `shortcuts` CLI
-offers `list`, `view`, `run` and `sign` but no export.
+The two in use are **Monitor to Desktop Input** (⌘⌥⌃H) and **Monitor to Laptop Input** (⌘⌥⌃D) — H for
+HDMI, D for DisplayPort. Their extracted definitions are in [`shortcuts/`](shortcuts/), as a record;
+they are not importable, because Shortcuts imports only signed files and signing needs iCloud.
 
-They are a **single action** each, so building them by hand takes about a minute.
-
-The two in use are named **Monitor to Desktop Input** and **Monitor to Laptop Input**.
+Each is a **single action**, so building them by hand takes about a minute.
 
 For each of the two directions:
 
 1. Shortcuts.app → **File → New Shortcut**.
 2. Search the action list for **Run Shell Script** and drag it in.
-3. Set **Shell** to `/bin/zsh`, and paste as the script — the path being wherever you keep this
-   script:
+3. Paste as the script — the path being wherever you keep this script:
 
        "$HOME/Projects/Laptop_Setup/display-switch/display-switch.sh" laptop
 
-   …using `desktop` for the other one.
+   …using `desktop` for the other one. The **Shell** setting does not matter and the real ones do not
+   set it: the script is invoked as a quoted path and carries its own `#!/bin/zsh`.
 4. Name them **Monitor to Laptop** and **Monitor to Desktop**.
 5. In the shortcut's details pane (the ⓘ sidebar), **Add Keyboard Shortcut** and press the chord you
    want. Pick something no app will swallow — the laptop-direction one gets pressed while you are

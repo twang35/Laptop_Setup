@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>WFWorkflowActions</key>
+	<array>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.runshellscript</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>Script</key>
+				<string>"$HOME/Projects/Laptop_Setup/display-switch/display-switch.sh" laptop</string>
+				<key>UUID</key>
+				<string>407469CD-A0A2-4B9C-BD46-B2CA3D6BEBFC</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
