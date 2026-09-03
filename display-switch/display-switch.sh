@@ -21,6 +21,10 @@
 # spaced by wall-clock sleeps. The wiggle then begins ~0.1 s after the input write is dispatched
 # instead of several seconds later.
 #
+# The desktop wake is dispatched the same way. With the desktop's monitor output powered down,
+# `xset` can take many seconds to answer, and the input switch has no reason to wait for it: the
+# DDC write goes out at once and the desktop's screen comes up whenever the wake lands.
+#
 # The read-back is the one call that must block, because its value is the whole point.
 #
 # Two traps this script exists to avoid:
@@ -88,6 +92,8 @@ notify() { /usr/bin/osascript -e "display notification \"$1\" with title \"Displ
 #
 # Best effort by design: ssh is home-LAN only and has been seen to fail transiently, and a hotkey
 # must never wedge because the desktop is off. A failure here is reported, not fatal.
+#
+# Blocking, bounded: 4 s to connect, 8 s hard kill. Used by `wake`, where the answer is the point.
 wake_desktop() {
   [[ $DESKTOP_WAKE == 1 ]] || return 0
   ( /usr/bin/ssh -o ConnectTimeout=4 -o BatchMode=yes "$DESKTOP_HOST" \
@@ -99,6 +105,16 @@ wake_desktop() {
     local rc=$?
     kill $w 2>/dev/null
     exit $rc )
+}
+
+# Fire and forget: dispatch the wake and return at once. When the desktop's monitor output is off,
+# `xset dpms force on` can take a while to return, and the input switch must not sit behind it.
+# Disowned for the same reason as `send`: the script exits long before the wake lands. A failure is
+# still reported, as a notification from the background job, since nobody is left to print it.
+dispatch_wake_desktop() {
+  [[ $DESKTOP_WAKE == 1 ]] || return 0
+  ( wake_desktop || notify "could not wake $DESKTOP_HOST (off, asleep or off-LAN); switched anyway" ) \
+    >/dev/null 2>&1 & disown
 }
 
 # --- confirmation ---------------------------------------------------------------------------------
@@ -128,10 +144,11 @@ case ${1:-} in
     ;;
 
   desktop)
-    # Wake the desktop's output first, so the monitor finds a live signal on HDMI 1 and the screen
-    # is already up when it appears.
-    wake_desktop || print -r -- "note: could not wake $DESKTOP_HOST (off, asleep or off-LAN); switching anyway"
-    send_input $HDMI1
+    # Dispatch the wake and the input write together, neither awaited. The monitor moves to HDMI 1
+    # at once; the desktop's screen comes up whenever the wake lands, which with the output powered
+    # down can be a while, and the switch has no reason to wait for it.
+    dispatch_wake_desktop    # dispatched, not awaited
+    send_input $HDMI1        # dispatched, not awaited
     (( VERIFY )) || exit 0
     if t=$(confirm_within $HDMI1 $DEADLINE); then
       print -r -- "on desktop (HDMI 1) in ${t}s"

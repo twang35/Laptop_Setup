@@ -9,7 +9,7 @@ that app's own binary, which doubles as a CLI.
 ## Use it from the terminal
 
     ./display-switch.sh read        # what input the monitor reports right now
-    ./display-switch.sh desktop     # wake the desktop, then -> HDMI 1
+    ./display-switch.sh desktop     # -> HDMI 1, waking the desktop alongside
     ./display-switch.sh laptop      # -> DP 1, with the wiggle and a retry loop
     ./display-switch.sh wake        # just wake the desktop's screen (for debugging)
 
@@ -80,16 +80,22 @@ Environment variables, so the behaviour can be swept without editing the script:
 
 ## Waking the desktop
 
-`desktop` wakes the desktop's screen before switching, so no mouse waggle is needed:
+`desktop` wakes the desktop's screen as it switches, so no mouse waggle is needed:
 
     ssh the-claw-den 'DISPLAY=:0 xset dpms force on; xset s reset'
+
+**The wake is dispatched, not awaited**, like every other send in the switch path (changed
+2026-09-03). With the desktop's output powered down, `xset` can take many seconds to return, and the
+input write used to queue behind it; now both go out together. The monitor moves to HDMI 1 at once
+and the desktop's screen comes up whenever the wake lands. `./display-switch.sh wake` is still the
+blocking form, for checking that the wake itself works.
 
 This is not only a convenience. When the monitor switches away, the desktop sees an HDMI
 disconnect and powers that output down, so on the way back there may be no live signal for the
 monitor to hold — the same failure mode as the DP side. Waking first addresses both.
 
-It is **best effort**: bounded at a 4 s connect and an 8 s hard kill, and a failure prints a note
-and lets the switch proceed. `ssh` here is home-LAN only and has been seen to fail transiently, and
+It is **best effort**: bounded at a 4 s connect and an 8 s hard kill, and a failure posts a
+notification from the background job while the switch proceeds regardless. `ssh` here is home-LAN only and has been seen to fail transiently, and
 a hotkey must never wedge because the desktop is off or you are away from home.
 
 **The desktop is not suspending, only blanking** (checked 2026-08-30): it answers `ssh` instantly
